@@ -7,21 +7,33 @@
 
 <style>
 /* ============================================================
-   1. RESET & BASE
+   1. RESET & BASE — Light theme, calm on the eyes
    ============================================================ */
 * { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
+:root{
+  --bg:#f8fafc;
+  --bg-soft:#eef4fb;
+  --red:#e63946;
+  --red-soft:#fdecee;
+  --sky:#1fa2e0;
+  --sky-soft:#e8f6fd;
+  --text-dark:#16213e;
+  --text-muted:#5c6b83;
+  --card:#ffffff;
+  --border:rgba(22,33,62,0.08);
+}
 body{
   font-family:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;
-  background:#08111f;
-  color:#eef2f8;
+  background:var(--bg);
+  color:var(--text-dark);
   overflow-x:hidden;
   position:relative;
   min-height:100vh;
 }
 
 /* ============================================================
-   2. BACKGROUND GLOW LAYERS
+   2. SOFT AMBIENT GLOW (very subtle, red + sky blue)
    ============================================================ */
 .bg-glow{
   position:fixed;
@@ -29,20 +41,15 @@ body{
   z-index:0;
   pointer-events:none;
   background:
-    radial-gradient(circle at 20% 20%, rgba(56,132,255,0.18), transparent 40%),
-    radial-gradient(circle at 80% 30%, rgba(94,110,255,0.14), transparent 45%),
-    radial-gradient(circle at 50% 90%, rgba(0,180,255,0.10), transparent 50%);
-  animation: floatGlow 14s ease-in-out infinite alternate;
-}
-@keyframes floatGlow{
-  0%   { transform:translate(0,0) scale(1); }
-  100% { transform:translate(-2%,3%) scale(1.08); }
+    radial-gradient(circle at 15% 10%, rgba(31,162,224,0.10), transparent 40%),
+    radial-gradient(circle at 85% 20%, rgba(230,57,70,0.08), transparent 45%),
+    radial-gradient(circle at 50% 95%, rgba(31,162,224,0.08), transparent 50%);
 }
 .mouse-glow{
   position:fixed;
-  width:500px; height:500px;
+  width:420px; height:420px;
   border-radius:50%;
-  background:radial-gradient(circle, rgba(80,150,255,0.12), transparent 70%);
+  background:radial-gradient(circle, rgba(31,162,224,0.09), transparent 70%);
   pointer-events:none;
   z-index:0;
   transform:translate(-50%,-50%);
@@ -51,10 +58,10 @@ body{
 }
 
 /* ============================================================
-   3. LAYOUT / CONTAINERS
+   3. LAYOUT
    ============================================================ */
 .container{
-  max-width:1200px;
+  max-width:1100px;
   margin:0 auto;
   padding:0 24px;
   position:relative;
@@ -69,331 +76,358 @@ nav{
   position:fixed;
   top:0; left:0; right:0;
   z-index:50;
-  backdrop-filter:blur(16px);
-  background:rgba(8,17,31,0.55);
-  border-bottom:1px solid rgba(255,255,255,0.06);
+  backdrop-filter:blur(14px);
+  background:rgba(248,250,252,0.75);
+  border-bottom:1px solid var(--border);
 }
 .nav-inner{
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding:16px 24px;
-  max-width:1200px;
+  max-width:1100px;
   margin:0 auto;
 }
-.logo{ font-weight:700; letter-spacing:0.5px; font-size:1.1rem; }
-.logo span{ color:#5aa9ff; }
+.logo{ font-weight:700; letter-spacing:0.5px; font-size:1.1rem; color:var(--text-dark); }
+.logo span{ color:var(--red); }
 .nav-links{ display:flex; gap:28px; list-style:none; }
 .nav-links a{
-  color:#c9d4e3;
+  color:var(--text-muted);
   text-decoration:none;
   font-size:0.92rem;
   transition:color .25s ease;
 }
-.nav-links a:hover{ color:#fff; }
+.nav-links a:hover{ color:var(--sky); }
 @media (max-width:700px){ .nav-links{ display:none; } }
 
 /* ============================================================
-   5. HERO SECTION
+   5. HERO — profile photo on top, minimal text
    ============================================================ */
 .hero{
   min-height:100vh;
   display:flex;
+  flex-direction:column;
   align-items:center;
-  padding-top:90px;
+  justify-content:center;
+  text-align:center;
+  padding:120px 24px 60px;
 }
-.hero-content{
-  max-width:640px;
-  margin-left:6%;
-  margin-right:auto;
+
+.profile-photo{
+  width:132px; height:132px;
+  border-radius:50%;
+  overflow:hidden;
+  border:4px solid #fff;
+  box-shadow:0 10px 30px rgba(22,33,62,0.12), 0 0 0 4px var(--sky-soft);
+  margin-bottom:26px;
+  opacity:0;
+  transform:translateY(-16px) scale(0.9);
+  animation:heroIn .8s ease forwards;
 }
+.profile-photo img{
+  width:100%; height:100%;
+  object-fit:cover;
+  display:block;
+}
+
 .hero-greeting{
-  font-size:clamp(2rem,5vw,3.4rem);
+  font-size:clamp(1.9rem,5vw,3rem);
   font-weight:700;
-  line-height:1.15;
+  line-height:1.2;
   letter-spacing:-0.5px;
-  background:linear-gradient(180deg,#ffffff, #b9cbe8);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
+  color:var(--text-dark);
   opacity:0;
-  transform:translateY(24px);
-  animation:heroIn .9s ease forwards;
+  transform:translateY(20px);
+  animation:heroIn .8s ease forwards;
+  animation-delay:.1s;
 }
+.hero-greeting .accent{ color:var(--red); }
+
 .hero-desc{
-  margin-top:22px;
-  font-size:1.08rem;
+  margin-top:18px;
+  font-size:1.02rem;
   line-height:1.7;
-  color:#a9b7cc;
-  max-width:520px;
+  color:var(--text-muted);
+  max-width:480px;
   opacity:0;
-  transform:translateY(24px);
-  animation:heroIn .9s ease forwards;
-  animation-delay:.15s;
+  transform:translateY(20px);
+  animation:heroIn .8s ease forwards;
+  animation-delay:.2s;
 }
+
 .hero-badges{
-  margin-top:30px;
+  margin-top:28px;
   display:flex;
   flex-wrap:wrap;
-  gap:12px;
+  justify-content:center;
+  gap:10px;
   opacity:0;
-  transform:translateY(24px);
-  animation:heroIn .9s ease forwards;
+  transform:translateY(20px);
+  animation:heroIn .8s ease forwards;
   animation-delay:.3s;
 }
 .badge{
   display:flex;
   align-items:center;
-  gap:8px;
-  padding:9px 16px;
+  gap:7px;
+  padding:8px 15px;
   border-radius:999px;
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.09);
-  backdrop-filter:blur(10px);
-  font-size:0.85rem;
-  color:#d7e0ee;
+  background:var(--sky-soft);
+  border:1px solid rgba(31,162,224,0.18);
+  font-size:0.82rem;
+  color:var(--text-dark);
 }
-.badge .tick{ color:#5ee0a0; font-weight:700; }
+.badge:nth-child(even){
+  background:var(--red-soft);
+  border-color:rgba(230,57,70,0.16);
+}
+.badge .tick{ color:var(--sky); font-weight:700; }
+.badge:nth-child(even) .tick{ color:var(--red); }
 
 .cta-btn{
-  margin-top:38px;
+  margin-top:34px;
   display:inline-block;
-  padding:15px 34px;
+  padding:14px 32px;
   font-size:1rem;
   font-weight:600;
-  color:#08111f;
-  background:linear-gradient(135deg,#7ec4ff,#4d8dff);
+  color:#fff;
+  background:linear-gradient(135deg,var(--sky),var(--red));
   border:none;
   border-radius:14px;
   cursor:pointer;
-  position:relative;
   text-decoration:none;
-  box-shadow:0 0 25px rgba(77,141,255,0.45), 0 8px 30px rgba(0,0,0,0.35);
+  box-shadow:0 10px 25px rgba(230,57,70,0.18);
   transition:transform .3s ease, box-shadow .3s ease;
   opacity:0;
-  transform:translateY(24px);
-  animation:heroIn .9s ease forwards;
-  animation-delay:.45s;
+  transform:translateY(20px);
+  animation:heroIn .8s ease forwards;
+  animation-delay:.4s;
 }
 .cta-btn:hover{
-  transform:translateY(-3px) scale(1.03);
-  box-shadow:0 0 40px rgba(77,141,255,0.65), 0 10px 35px rgba(0,0,0,0.4);
+  transform:translateY(-3px);
+  box-shadow:0 14px 32px rgba(230,57,70,0.28);
 }
-@keyframes heroIn{ to{ opacity:1; transform:translateY(0); } }
+@keyframes heroIn{ to{ opacity:1; transform:translateY(0) scale(1); } }
 
 /* ============================================================
    6. SECTION HEADINGS
    ============================================================ */
 .section-title{
   text-align:center;
-  font-size:clamp(1.8rem,4vw,2.6rem);
+  font-size:clamp(1.7rem,4vw,2.3rem);
   font-weight:700;
-  margin-bottom:60px;
+  margin-bottom:56px;
   letter-spacing:-0.5px;
+  color:var(--text-dark);
   opacity:0;
-  transform:translateY(20px);
-  transition:opacity .8s ease, transform .8s ease;
+  transform:translateY(18px);
+  transition:opacity .7s ease, transform .7s ease;
 }
 .section-title.visible{ opacity:1; transform:translateY(0); }
 
 /* ============================================================
-   7. PROJECTS SECTION
+   7. PROJECTS — vertical stack: raw (small, top) -> thumbnail (large, below)
    ============================================================ */
-.projects{ padding:120px 0; }
+.projects{ padding:90px 0 110px; }
 
 .project-card{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:40px;
+  display:flex;
+  flex-direction:column;
   align-items:center;
-  margin-bottom:140px;
+  margin-bottom:110px;
   opacity:0;
-  transform:translateY(40px);
-  transition:opacity .9s ease, transform .9s ease;
+  transform:translateY(30px);
+  transition:opacity .8s ease, transform .8s ease;
 }
 .project-card.visible{ opacity:1; transform:translateY(0); }
-.project-card.reverse{ direction:rtl; }
-.project-card.reverse > *{ direction:ltr; }
 
-.image-frame{
-  position:relative;
-  border-radius:20px;
-  overflow:hidden;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.08);
-  backdrop-filter:blur(14px);
-  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+/* Small raw preview on top */
+.raw-frame{
+  width:42%;
+  max-width:280px;
   aspect-ratio:16/9;
-  transition:transform .4s ease, box-shadow .4s ease;
+  border-radius:14px;
+  overflow:hidden;
+  background:var(--card);
+  border:1px solid var(--border);
+  box-shadow:0 8px 20px rgba(22,33,62,0.08);
+  position:relative;
 }
-.image-frame:hover{
-  transform:translateY(-6px);
-  box-shadow:0 30px 65px rgba(0,0,0,0.5), 0 0 35px rgba(77,141,255,0.25);
+.raw-frame img{
+  width:100%; height:100%;
+  object-fit:cover;
+  display:block;
+  filter:saturate(0.85);
 }
-.image-frame img{
+.raw-frame .tag{
+  position:absolute;
+  top:8px; left:8px;
+  font-size:0.62rem;
+  font-weight:700;
+  letter-spacing:0.6px;
+  padding:3px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.9);
+  color:var(--text-muted);
+  border:1px solid var(--border);
+}
+
+/* Gap + connector */
+.flow-gap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+  margin:14px 0;
+}
+.flow-gap .line{
+  width:2px; height:22px;
+  background:linear-gradient(180deg, var(--sky), var(--red));
+  border-radius:2px;
+}
+.flow-gap .arrow{ color:var(--red); font-size:1rem; }
+
+/* Large thumbnail below, with reveal-in animation */
+.thumb-frame{
+  width:100%;
+  max-width:640px;
+  aspect-ratio:16/9;
+  border-radius:22px;
+  overflow:hidden;
+  background:var(--card);
+  border:1px solid var(--border);
+  box-shadow:0 20px 45px rgba(22,33,62,0.12);
+  position:relative;
+  transform:scale(0.85);
+  opacity:0;
+  filter:blur(10px);
+  transition:transform 1s cubic-bezier(.22,1,.36,1), opacity 1s ease, filter 1s ease, box-shadow .4s ease;
+}
+.thumb-frame.revealed{
+  transform:scale(1);
+  opacity:1;
+  filter:blur(0);
+}
+.thumb-frame:hover{
+  box-shadow:0 26px 55px rgba(22,33,62,0.18), 0 0 0 4px var(--sky-soft);
+}
+.thumb-frame img{
   width:100%; height:100%;
   object-fit:cover;
   display:block;
 }
-.frame-label{
+.thumb-frame .tag{
   position:absolute;
-  bottom:14px; left:14px;
-  padding:6px 14px;
-  font-size:0.75rem;
-  font-weight:600;
-  letter-spacing:0.5px;
-  text-transform:uppercase;
-  border-radius:999px;
-  background:rgba(8,17,31,0.65);
-  border:1px solid rgba(255,255,255,0.12);
-  backdrop-filter:blur(8px);
-}
-
-/* --- The morph target: raw image transforming into thumbnail --- */
-.morph-wrap{ position:relative; }
-.morph-wrap .raw-img,
-.morph-wrap .thumb-img{
-  position:absolute;
-  inset:0;
-  width:100%; height:100%;
-  object-fit:cover;
-  will-change:transform, filter, opacity, clip-path;
-}
-.morph-wrap .thumb-img{ opacity:0; }
-
-.project-info{ padding:0 8px; }
-.project-info h3{
-  font-size:1.4rem;
+  top:14px; left:14px;
+  font-size:0.72rem;
   font-weight:700;
-  margin-bottom:10px;
+  letter-spacing:0.6px;
+  padding:5px 13px;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--sky),var(--red));
+  color:#fff;
+}
+
+.project-info{
+  text-align:center;
+  margin-top:22px;
+  max-width:520px;
+}
+.project-info h3{
+  font-size:1.25rem;
+  font-weight:700;
+  margin-bottom:8px;
+  color:var(--text-dark);
 }
 .project-info p{
-  color:#a9b7cc;
-  font-size:0.98rem;
+  color:var(--text-muted);
+  font-size:0.92rem;
   line-height:1.6;
 }
-.arrow-indicator{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  margin-top:16px;
-  font-size:0.85rem;
-  color:#5aa9ff;
-  font-weight:600;
-}
-
-@media (max-width:820px){
-  .project-card, .project-card.reverse{
-    grid-template-columns:1fr;
-    direction:ltr;
-  }
-}
 
 /* ============================================================
-   8. GRADIENT BORDER ANIMATION (used on cards)
-   ============================================================ */
-.image-frame::before{
-  content:'';
-  position:absolute;
-  inset:-1px;
-  border-radius:20px;
-  background:linear-gradient(120deg, rgba(122,180,255,0.5), transparent, rgba(122,180,255,0.5));
-  background-size:200% 200%;
-  z-index:-1;
-  opacity:0;
-  transition:opacity .4s ease;
-  animation:borderMove 5s linear infinite;
-}
-.image-frame:hover::before{ opacity:1; }
-@keyframes borderMove{
-  0%{ background-position:0% 50%; }
-  100%{ background-position:200% 50%; }
-}
-
-/* ============================================================
-   9. CONTACT / FOOTER SECTION
+   8. CONTACT SECTION
    ============================================================ */
 .contact{
-  padding:140px 0 80px;
+  padding:110px 0 70px;
   text-align:center;
 }
 .contact h2{
-  font-size:clamp(2rem,5vw,3.2rem);
+  font-size:clamp(1.9rem,5vw,2.8rem);
   font-weight:700;
-  margin-bottom:18px;
+  margin-bottom:16px;
+  color:var(--text-dark);
   opacity:0;
-  transform:translateY(20px);
-  transition:opacity .8s ease, transform .8s ease;
+  transform:translateY(18px);
+  transition:opacity .7s ease, transform .7s ease;
 }
 .contact h2.visible{ opacity:1; transform:translateY(0); }
 .contact p.sub{
-  color:#a9b7cc;
-  margin-bottom:40px;
-  font-size:1.05rem;
+  color:var(--text-muted);
+  margin-bottom:36px;
+  font-size:1rem;
 }
 .contact-buttons{
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
-  gap:18px;
-  margin-bottom:34px;
+  gap:16px;
+  margin-bottom:30px;
 }
 .contact-btn{
-  padding:15px 30px;
+  padding:14px 28px;
   border-radius:14px;
   font-weight:600;
-  font-size:0.95rem;
+  font-size:0.92rem;
   text-decoration:none;
-  color:#eef2f8;
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
-  backdrop-filter:blur(12px);
-  transition:transform .3s ease, box-shadow .3s ease, background .3s ease;
+  color:var(--text-dark);
+  background:var(--card);
+  border:1px solid var(--border);
+  transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
 }
 .contact-btn:hover{
-  transform:translateY(-4px);
-  background:rgba(255,255,255,0.09);
-  box-shadow:0 15px 35px rgba(77,141,255,0.25);
+  transform:translateY(-3px);
+  box-shadow:0 12px 28px rgba(22,33,62,0.1);
+  border-color:var(--sky);
 }
 .contact-btn.primary{
-  background:linear-gradient(135deg,#7ec4ff,#4d8dff);
-  color:#08111f;
+  background:linear-gradient(135deg,var(--sky),var(--red));
+  color:#fff;
   border:none;
-  box-shadow:0 0 25px rgba(77,141,255,0.4);
+  box-shadow:0 10px 25px rgba(230,57,70,0.18);
 }
 .payment-note{
   display:inline-flex;
   align-items:center;
-  gap:10px;
-  padding:10px 20px;
+  gap:9px;
+  padding:9px 18px;
   border-radius:999px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.08);
-  font-size:0.85rem;
-  color:#9fb0c8;
+  background:var(--sky-soft);
+  border:1px solid rgba(31,162,224,0.18);
+  font-size:0.82rem;
+  color:var(--text-dark);
 }
 footer{
   text-align:center;
-  padding:30px 0;
-  color:#5c6b82;
-  font-size:0.82rem;
-  border-top:1px solid rgba(255,255,255,0.05);
+  padding:28px 0;
+  color:var(--text-muted);
+  font-size:0.8rem;
+  border-top:1px solid var(--border);
 }
 
 /* ============================================================
-   10. SCROLL REVEAL UTILITY
+   9. SCROLL REVEAL UTILITY
    ============================================================ */
 .reveal{
   opacity:0;
-  transform:translateY(30px);
-  transition:opacity .8s ease, transform .8s ease;
+  transform:translateY(24px);
+  transition:opacity .7s ease, transform .7s ease;
 }
 .reveal.visible{ opacity:1; transform:translateY(0); }
 </style>
 </head>
 <body>
 
-<!-- Background ambient glow -->
 <div class="bg-glow"></div>
 <div class="mouse-glow" id="mouseGlow"></div>
 
@@ -411,39 +445,39 @@ footer{
 </nav>
 
 <!-- ============================================================
-     HERO SECTION
+     HERO — profile photo at top, minimal text
+     Replace "profile.jpg" with your actual photo file
      ============================================================ -->
 <section class="hero">
-  <div class="hero-content">
-    <h1 class="hero-greeting">Hi, My Name is<br>Aditya Kumar</h1>
-    <p class="hero-desc">
-      I create high CTR YouTube thumbnails by analyzing every channel individually
-      to maximize clicks and improve performance.
-    </p>
-    <div class="hero-badges">
-      <div class="badge"><span class="tick">✔</span> CTR Specialist</div>
-      <div class="badge"><span class="tick">✔</span> Worked with 200+ Clients</div>
-      <div class="badge"><span class="tick">✔</span> Fast Delivery</div>
-      <div class="badge"><span class="tick">✔</span> Crypto & UPI Accepted</div>
-    </div>
-    <a href="#contact" class="cta-btn">Contact Me</a>
+  <div class="profile-photo">
+    <img src="profile.jpg" alt="Aditya Kumar">
   </div>
+  <h1 class="hero-greeting">Hi, My Name is <span class="accent">Aditya Kumar</span></h1>
+  <p class="hero-desc">
+    I create high CTR YouTube thumbnails by analyzing every channel individually
+    to maximize clicks and improve performance.
+  </p>
+  <div class="hero-badges">
+    <div class="badge"><span class="tick">✔</span> CTR Specialist</div>
+    <div class="badge"><span class="tick">✔</span> 200+ Clients</div>
+    <div class="badge"><span class="tick">✔</span> Fast Delivery</div>
+    <div class="badge"><span class="tick">✔</span> Crypto & UPI</div>
+  </div>
+  <a href="#contact" class="cta-btn">Contact Me</a>
 </section>
 
 <!-- ============================================================
-     PROJECTS SECTION
+     PROJECTS — raw (small) on top, thumbnail (large) below
      ============================================================ -->
 <section class="projects" id="projects">
   <div class="container">
     <h2 class="section-title reveal">Our Recent Projects</h2>
-
-    <!-- Projects are generated by JS below to keep markup DRY -->
     <div id="projectsContainer"></div>
   </div>
 </section>
 
 <!-- ============================================================
-     CONTACT / FOOTER SECTION
+     CONTACT
      ============================================================ -->
 <section class="contact" id="contact">
   <div class="container">
@@ -463,172 +497,90 @@ footer{
 
 <script>
 /* ============================================================
-   1. PROJECT DATA
-   Replace raw/thumb file names with your actual saved images.
-   Titles below already match the 6 pairs you provided.
-   Add more objects to this array later when you have more pairs —
-   the layout auto-alternates and needs no other code changes.
+   1. PROJECT DATA — rename your saved images to match these
    ============================================================ */
 const projects = [
-  {
-    id: 1,
-    raw: "raw1.jpg",
-    thumb: "thumb1.jpg",
-    title: "How To Get First Project",
-    desc: "Plain talking-head footage transformed into a bold, icon-driven thumbnail built to explain a step-by-step process at a glance."
-  },
-  {
-    id: 2,
-    raw: "raw2.jpg",
-    thumb: "thumb2.jpg",
-    title: "Sell Ebook",
-    desc: "Simple podcast-style clip turned into a high-contrast sales thumbnail with product mockup and money visuals for maximum CTR."
-  },
-  {
-    id: 3,
-    raw: "raw3.jpg",
-    thumb: "thumb3.jpg",
-    title: "Improve Credit Score 800+ in 30 Days",
-    desc: "Everyday webcam shot elevated into a results-driven finance thumbnail with bold typography and a trending graph overlay."
-  },
-  {
-    id: 4,
-    raw: "raw4.jpg",
-    thumb: "thumb4.jpg",
-    title: "No-Code AI Agents Full Guide",
-    desc: "Flat mic-shot footage reworked into an eye-catching tech thumbnail with 3D icon props and punchy contrasting text."
-  },
-  {
-    id: 5,
-    raw: "raw5.jpg",
-    thumb: "thumb5.jpg",
-    title: "Make.com Full Course",
-    desc: "Neutral portrait shot converted into a clean SaaS-style thumbnail showcasing the automation workflow and brand colors."
-  },
-  {
-    id: 6,
-    raw: "raw6.jpg",
-    thumb: "thumb6.jpg",
-    title: "The Discipline of Focus",
-    desc: "Casual raw footage transformed into a striking book-promo thumbnail with a bold red/white contrast theme and blocked-app icons."
-  }
+  { id:1, raw:"raw1.jpg", thumb:"thumb1.jpg", title:"How To Get First Project",
+    desc:"Plain talking-head footage transformed into a bold, icon-driven thumbnail." },
+  { id:2, raw:"raw2.jpg", thumb:"thumb2.jpg", title:"Sell Ebook",
+    desc:"Simple podcast clip turned into a high-contrast sales thumbnail." },
+  { id:3, raw:"raw3.jpg", thumb:"thumb3.jpg", title:"Improve Credit Score 800+ in 30 Days",
+    desc:"Everyday webcam shot elevated into a results-driven finance thumbnail." },
+  { id:4, raw:"raw4.jpg", thumb:"thumb4.jpg", title:"No-Code AI Agents Full Guide",
+    desc:"Flat mic-shot footage reworked into an eye-catching tech thumbnail." },
+  { id:5, raw:"raw5.jpg", thumb:"thumb5.jpg", title:"Make.com Full Course",
+    desc:"Neutral portrait shot converted into a clean SaaS-style thumbnail." },
+  { id:6, raw:"raw6.jpg", thumb:"thumb6.jpg", title:"The Discipline of Focus",
+    desc:"Casual raw footage transformed into a striking book-promo thumbnail." }
 ];
 
 /* ============================================================
-   2. BUILD PROJECT CARDS DYNAMICALLY
+   2. BUILD PROJECT CARDS — raw on top (small), thumbnail below (large)
    ============================================================ */
 const container = document.getElementById('projectsContainer');
 
-projects.forEach((p, index) => {
-  const isReverse = index % 2 === 1; // alternate layout
+projects.forEach((p) => {
   const card = document.createElement('div');
-  card.className = `project-card reveal ${isReverse ? 'reverse' : ''}`;
+  card.className = 'project-card reveal';
   card.innerHTML = `
-    <div class="image-frame morph-wrap" data-morph>
-      <img class="raw-img" src="${p.raw}" alt="Raw image ${p.id}">
-      <img class="thumb-img" src="${p.thumb}" alt="Thumbnail ${p.id}">
-      <div class="frame-label">Raw → Thumbnail</div>
+    <div class="raw-frame">
+      <span class="tag">RAW</span>
+      <img src="${p.raw}" alt="Raw image ${p.id}">
+    </div>
+    <div class="flow-gap">
+      <div class="line"></div>
+      <span class="arrow">↓</span>
+    </div>
+    <div class="thumb-frame" data-thumb>
+      <span class="tag">THUMBNAIL</span>
+      <img src="${p.thumb}" alt="Thumbnail ${p.id}">
     </div>
     <div class="project-info">
       <h3>${p.title}</h3>
       <p>${p.desc}</p>
-      <div class="arrow-indicator">Scroll to see the transformation ↓</div>
     </div>
   `;
   container.appendChild(card);
 });
 
 /* ============================================================
-   3. SCROLL REVEAL (Intersection Observer)
+   3. SCROLL REVEAL — cards fade/slide in
    ============================================================ */
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
+    if (entry.isIntersecting) entry.target.classList.add('visible');
   });
 }, { threshold: 0.15 });
 
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 /* ============================================================
-   4. APPLE-STYLE MORPH ANIMATION (raw -> thumbnail on scroll)
-   Uses scroll position relative to each card's viewport progress
-   to drive opacity, blur, scale and clip-path interpolation.
+   4. THUMBNAIL REVEAL ANIMATION — scales/unblurs in on scroll
+   Feels like the thumbnail is being "developed" as you scroll to it
    ============================================================ */
-const morphElements = Array.from(document.querySelectorAll('[data-morph]'));
-
-function clamp(val, min, max) {
-  return Math.max(min, Math.min(max, val));
-}
-
-function lerp(a, b, t) { return a + (b - a) * t; }
-
-function updateMorphs() {
-  const viewportH = window.innerHeight;
-
-  morphElements.forEach(el => {
-    const rect = el.getBoundingClientRect();
-
-    const start = viewportH * 0.95;
-    const end = viewportH * 0.35;
-    let progress = (start - rect.top) / (start - end);
-    progress = clamp(progress, 0, 1);
-
-    const eased = progress * progress * (3 - 2 * progress); // smoothstep
-
-    const rawImg = el.querySelector('.raw-img');
-    const thumbImg = el.querySelector('.thumb-img');
-
-    rawImg.style.opacity = 1 - eased;
-    rawImg.style.filter = `blur(${eased * 14}px) saturate(${1 - eased * 0.3})`;
-    rawImg.style.transform = `scale(${lerp(1, 1.08, eased)})`;
-    rawImg.style.clipPath = `inset(0% ${eased * 100}% 0% 0% round 20px)`;
-
-    thumbImg.style.opacity = eased;
-    thumbImg.style.filter = `blur(${(1 - eased) * 10}px) saturate(${0.7 + eased * 0.3})`;
-    thumbImg.style.transform = `scale(${lerp(1.08, 1, eased)})`;
-    thumbImg.style.clipPath = `inset(0% 0% 0% ${(1 - eased) * 100}% round 20px)`;
+const thumbObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+    }
   });
-}
+}, { threshold: 0.3 });
 
-let scrollTicking = false;
-window.addEventListener('scroll', () => {
-  if (!scrollTicking) {
-    requestAnimationFrame(() => {
-      updateMorphs();
-      scrollTicking = false;
-    });
-    scrollTicking = true;
-  }
-});
-window.addEventListener('resize', updateMorphs);
-updateMorphs();
+document.querySelectorAll('[data-thumb]').forEach(el => thumbObserver.observe(el));
 
 /* ============================================================
-   5. MOUSE MOVEMENT GLOW EFFECT
+   5. MOUSE GLOW
    ============================================================ */
 const mouseGlow = document.getElementById('mouseGlow');
 let glowVisible = false;
-
 window.addEventListener('mousemove', (e) => {
   mouseGlow.style.left = `${e.clientX}px`;
   mouseGlow.style.top = `${e.clientY}px`;
-  if (!glowVisible) {
-    mouseGlow.style.opacity = '1';
-    glowVisible = true;
-  }
+  if (!glowVisible) { mouseGlow.style.opacity = '1'; glowVisible = true; }
 });
 window.addEventListener('mouseleave', () => {
   mouseGlow.style.opacity = '0';
   glowVisible = false;
-});
-
-/* ============================================================
-   6. SECTION TITLE REVEAL
-   ============================================================ */
-document.querySelectorAll('.section-title, .contact h2').forEach(el => {
-  revealObserver.observe(el);
 });
 </script>
 
