@@ -262,10 +262,10 @@ nav{
   position:relative;
   width:54%;
   max-width:300px;
-  margin-bottom:70px; /* space reserved for the curved arrow below */
+  margin-bottom:78px; /* space reserved for the curved arrow below */
 }
 
-/* Raw preview — slightly bigger than before, offset to the side */
+/* Raw preview — offset to the side, slightly bigger than the original size */
 .raw-frame{
   width:100%;
   aspect-ratio:16/9;
@@ -282,38 +282,42 @@ nav{
   filter:saturate(0.85);
 }
 
-/* Curved arrow PNG — replace old dotted straight line.
-   Positioned bridging raw-frame's bottom-right down to the thumbnail.
-   Rotation/size vary per card via inline CSS vars set in JS below. */
+/* ============================================================
+   Curved arrow PNG — fixed orientation matching the reference
+   (tail bottom-left, arrowhead pointing up-right into the thumbnail).
+   Only SIZE varies slightly per card, not rotation — this keeps the
+   arrowhead consistently pointing the right way on every card,
+   instead of spinning into odd angles like before.
+   ============================================================ */
 .flow-arrow{
   position:absolute;
-  right:-38px;
-  bottom:-64px;
-  width:var(--arrow-w, 110px);
+  left:16px;
+  bottom:-70px;
+  width:var(--arrow-w, 108px);
+  height:auto;
   opacity:0;
-  transform:scale(0.7) rotate(var(--arrow-rot, 0deg));
-  transform-origin:top left;
+  transform:scale(0.7);
+  transform-origin:bottom left;
   transition:opacity .6s ease, transform .6s cubic-bezier(.22,1,.36,1);
   pointer-events:none;
   z-index:2;
-  filter:drop-shadow(0 4px 8px rgba(0,0,0,0.08));
 }
 .project-card.visible .flow-arrow{
   opacity:1;
-  transform:scale(1) rotate(var(--arrow-rot, 0deg));
+  transform:scale(1);
   animation:arrowFloat 3.2s ease-in-out infinite;
   animation-delay:.6s;
 }
 @keyframes arrowFloat{
-  0%,100%{ transform:translateY(0) scale(1) rotate(var(--arrow-rot, 0deg)); }
-  50%{ transform:translateY(7px) scale(1) rotate(var(--arrow-rot, 0deg)); }
+  0%,100%{ transform:translateY(0) scale(1); }
+  50%{ transform:translateY(6px) scale(1); }
 }
 
-/* Large thumbnail, full width of the stack, reveal-in animation */
+/* Large thumbnail — corners much less round now */
 .thumb-frame{
   width:100%;
   aspect-ratio:16/9;
-  border-radius:22px;
+  border-radius:10px;
   overflow:hidden;
   background:var(--card);
   border:1px solid var(--border);
@@ -434,8 +438,8 @@ footer{
 @media (min-width:1024px){
   .hero-desc{ font-size:1.1rem; max-width:540px; }
   .media-stack{ max-width:760px; }
-  .raw-wrap{ max-width:340px; margin-bottom:90px; }
-  .flow-arrow{ right:-50px; bottom:-84px; }
+  .raw-wrap{ max-width:340px; margin-bottom:98px; }
+  .flow-arrow{ left:20px; bottom:-90px; }
   .project-card{ margin-bottom:170px; }
   .thumb-frame:hover{ transform:scale(1.015); }
   .section-title{ font-size:2.5rem; }
@@ -496,15 +500,15 @@ footer{
 </section>
 
 <!-- ============================================================
-     CONTACT
+     CONTACT — updated with your real Telegram + Email
      ============================================================ -->
 <section class="contact" id="contact">
   <div class="container">
     <h2 class="reveal">Let's Work Together</h2>
     <p class="sub">Ready to boost your CTR? Reach out and let's talk about your channel.</p>
     <div class="contact-buttons">
-      <a href="mailto:hello@adityakumar.com" class="contact-btn primary">Email Me</a>
-      <a href="https://t.me/yourtelegram" target="_blank" class="contact-btn">Telegram</a>
+      <a href="mailto:adityakumar58vf@gmail.com" class="contact-btn primary">Email Me</a>
+      <a href="https://t.me/Thumbcraft0" target="_blank" class="contact-btn">Telegram</a>
     </div>
     <div class="payment-note">💳 Crypto & UPI Accepted</div>
   </div>
@@ -528,20 +532,12 @@ const projects = [
 ];
 
 /* ============================================================
-   2. ARROW VARIATION SET
-   Each card gets a slightly different rotation + size so the
-   curved arrow doesn't look copy-pasted identical every time,
-   while still matching the same overall reference style.
-   Cycles through this list if there are more projects than entries.
+   2. ARROW SIZE VARIATION — only width changes, not rotation.
+   This keeps the arrowhead pointing the same correct direction
+   on every card (matching the reference PNG), while still giving
+   each card a slightly different scale so it doesn't feel copy-pasted.
    ============================================================ */
-const arrowVariants = [
-  { rot: -8,  w: 108 },
-  { rot: 10,  w: 96  },
-  { rot: -12, w: 118 },
-  { rot: 6,   w: 100 },
-  { rot: -5,  w: 104 },
-  { rot: 9,   w: 112 }
-];
+const arrowWidths = [108, 96, 116, 100, 104, 112];
 
 /* ============================================================
    3. BUILD PROJECT CARDS
@@ -549,7 +545,7 @@ const arrowVariants = [
 const container = document.getElementById('projectsContainer');
 
 projects.forEach((p, index) => {
-  const variant = arrowVariants[index % arrowVariants.length];
+  const arrowW = arrowWidths[index % arrowWidths.length];
 
   const card = document.createElement('div');
   card.className = 'project-card reveal';
@@ -562,7 +558,7 @@ projects.forEach((p, index) => {
         <img class="flow-arrow"
              src="arrow.png"
              alt="Arrow"
-             style="--arrow-rot:${variant.rot}deg; --arrow-w:${variant.w}px;">
+             style="--arrow-w:${arrowW}px;">
       </div>
       <div class="thumb-frame" data-thumb>
         <img src="${p.thumb}" alt="Thumbnail ${p.id}">
