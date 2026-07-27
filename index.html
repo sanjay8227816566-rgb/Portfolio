@@ -32,7 +32,7 @@ body{
 }
 
 /* ============================================================
-   2. SOFT AMBIENT GLOW — subtle red only
+   2. SOFT AMBIENT GLOW
    ============================================================ */
 .bg-glow{
   position:fixed;
@@ -59,7 +59,7 @@ body{
    3. LAYOUT
    ============================================================ */
 .container{
-  max-width:1100px;
+  max-width:1200px;
   margin:0 auto;
   padding:0 24px;
   position:relative;
@@ -83,7 +83,7 @@ nav{
   justify-content:space-between;
   align-items:center;
   padding:16px 24px;
-  max-width:1100px;
+  max-width:1200px;
   margin:0 auto;
 }
 .logo{ font-weight:700; letter-spacing:0.5px; font-size:1.1rem; color:var(--text-dark); }
@@ -207,7 +207,7 @@ nav{
 @keyframes heroIn{ to{ opacity:1; transform:translateY(0) scale(1); } }
 
 /* ============================================================
-   6. SECTION HEADING — red strip highlight, sharp corners
+   6. SECTION HEADING
    ============================================================ */
 .title-wrap{
   text-align:center;
@@ -233,9 +233,17 @@ nav{
 }
 
 /* ============================================================
-   7. PROJECTS — raw (offset, bigger) -> curved arrow -> thumbnail
+   7. PROJECTS — mobile: single column stack.
+   Desktop: 2-column grid, so 2 cards per row (4 visible per
+   viewport as you scroll — 2 up top, 2 below).
    ============================================================ */
 .projects{ padding:90px 0 110px; }
+
+#projectsContainer{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;
+}
 
 .project-card{
   display:flex;
@@ -257,15 +265,13 @@ nav{
   align-items:flex-start;
 }
 
-/* Wrapper keeps raw-frame + arrow anchored together */
 .raw-wrap{
   position:relative;
   width:54%;
   max-width:300px;
-  margin-bottom:78px; /* space reserved for the curved arrow below */
+  margin-bottom:24px; /* simple fixed gap, no connecting line */
 }
 
-/* Raw preview — offset to the side, slightly bigger than the original size */
 .raw-frame{
   width:100%;
   aspect-ratio:16/9;
@@ -274,6 +280,7 @@ nav{
   background:var(--card);
   border:1px solid var(--border);
   box-shadow:0 8px 20px rgba(0,0,0,0.06);
+  position:relative;
 }
 .raw-frame img{
   width:100%; height:100%;
@@ -282,38 +289,22 @@ nav{
   filter:saturate(0.85);
 }
 
-/* ============================================================
-   Curved arrow PNG — fixed orientation matching the reference
-   (tail bottom-left, arrowhead pointing up-right into the thumbnail).
-   Only SIZE varies slightly per card, not rotation — this keeps the
-   arrowhead consistently pointing the right way on every card,
-   instead of spinning into odd angles like before.
-   ============================================================ */
-.flow-arrow{
+/* RAW IMAGE tag, back on the raw frame */
+.raw-frame .tag{
   position:absolute;
-  left:16px;
-  bottom:-70px;
-  width:var(--arrow-w, 108px);
-  height:auto;
-  opacity:0;
-  transform:scale(0.7);
-  transform-origin:bottom left;
-  transition:opacity .6s ease, transform .6s cubic-bezier(.22,1,.36,1);
-  pointer-events:none;
-  z-index:2;
-}
-.project-card.visible .flow-arrow{
-  opacity:1;
-  transform:scale(1);
-  animation:arrowFloat 3.2s ease-in-out infinite;
-  animation-delay:.6s;
-}
-@keyframes arrowFloat{
-  0%,100%{ transform:translateY(0) scale(1); }
-  50%{ transform:translateY(6px) scale(1); }
+  top:8px; left:8px;
+  font-size:0.62rem;
+  font-weight:700;
+  letter-spacing:0.6px;
+  text-transform:uppercase;
+  padding:4px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.92);
+  color:var(--text-muted);
+  border:1px solid var(--border);
 }
 
-/* Large thumbnail — corners much less round now */
+/* Large thumbnail */
 .thumb-frame{
   width:100%;
   aspect-ratio:16/9;
@@ -433,14 +424,21 @@ footer{
 .reveal.visible{ opacity:1; transform:translateY(0); }
 
 /* ============================================================
-   10. DESKTOP ENHANCEMENTS
+   10. DESKTOP ENHANCEMENTS — 2-column project grid.
+   2 cards per row means as you scroll, 2 appear on top and
+   2 more directly below (4 visible in a typical viewport).
    ============================================================ */
 @media (min-width:1024px){
   .hero-desc{ font-size:1.1rem; max-width:540px; }
-  .media-stack{ max-width:760px; }
-  .raw-wrap{ max-width:340px; margin-bottom:98px; }
-  .flow-arrow{ left:20px; bottom:-90px; }
-  .project-card{ margin-bottom:170px; }
+
+  #projectsContainer{
+    grid-template-columns:repeat(2, 1fr);
+    gap:60px 40px;
+  }
+  .project-card{ margin-bottom:0; }
+  .media-stack{ max-width:100%; }
+  .raw-wrap{ max-width:260px; }
+
   .thumb-frame:hover{ transform:scale(1.015); }
   .section-title{ font-size:2.5rem; }
   .contact h2{ font-size:3rem; }
@@ -500,7 +498,7 @@ footer{
 </section>
 
 <!-- ============================================================
-     CONTACT — updated with your real Telegram + Email
+     CONTACT
      ============================================================ -->
 <section class="contact" id="contact">
   <div class="container">
@@ -520,45 +518,37 @@ footer{
 
 <script>
 /* ============================================================
-   1. PROJECT DATA — rename your saved images to match these
+   1. PROJECT DATA — now 10 projects. Replace raw/thumb file
+   names with your saved images; rename generic titles as needed.
    ============================================================ */
 const projects = [
-  { id:1, raw:"raw1.jpg", thumb:"thumb1.jpg", title:"How To Get First Project" },
-  { id:2, raw:"raw2.jpg", thumb:"thumb2.jpg", title:"Sell Ebook" },
-  { id:3, raw:"raw3.jpg", thumb:"thumb3.jpg", title:"Improve Credit Score 800+ in 30 Days" },
-  { id:4, raw:"raw4.jpg", thumb:"thumb4.jpg", title:"No-Code AI Agents Full Guide" },
-  { id:5, raw:"raw5.jpg", thumb:"thumb5.jpg", title:"Make.com Full Course" },
-  { id:6, raw:"raw6.jpg", thumb:"thumb6.jpg", title:"The Discipline of Focus" }
+  { id:1,  raw:"raw1.jpg",  thumb:"thumb1.jpg",  title:"How To Get First Project" },
+  { id:2,  raw:"raw2.jpg",  thumb:"thumb2.jpg",  title:"Sell Ebook" },
+  { id:3,  raw:"raw3.jpg",  thumb:"thumb3.jpg",  title:"Improve Credit Score 800+ in 30 Days" },
+  { id:4,  raw:"raw4.jpg",  thumb:"thumb4.jpg",  title:"No-Code AI Agents Full Guide" },
+  { id:5,  raw:"raw5.jpg",  thumb:"thumb5.jpg",  title:"Make.com Full Course" },
+  { id:6,  raw:"raw6.jpg",  thumb:"thumb6.jpg",  title:"The Discipline of Focus" },
+  { id:7,  raw:"raw7.jpg",  thumb:"thumb7.jpg",  title:"Project 7" },
+  { id:8,  raw:"raw8.jpg",  thumb:"thumb8.jpg",  title:"Project 8" },
+  { id:9,  raw:"raw9.jpg",  thumb:"thumb9.jpg",  title:"Project 9" },
+  { id:10, raw:"raw10.jpg", thumb:"thumb10.jpg", title:"Project 10" }
 ];
 
 /* ============================================================
-   2. ARROW SIZE VARIATION — only width changes, not rotation.
-   This keeps the arrowhead pointing the same correct direction
-   on every card (matching the reference PNG), while still giving
-   each card a slightly different scale so it doesn't feel copy-pasted.
-   ============================================================ */
-const arrowWidths = [108, 96, 116, 100, 104, 112];
-
-/* ============================================================
-   3. BUILD PROJECT CARDS
+   2. BUILD PROJECT CARDS — raw (tagged, on top) -> gap -> thumbnail
    ============================================================ */
 const container = document.getElementById('projectsContainer');
 
-projects.forEach((p, index) => {
-  const arrowW = arrowWidths[index % arrowWidths.length];
-
+projects.forEach((p) => {
   const card = document.createElement('div');
   card.className = 'project-card reveal';
   card.innerHTML = `
     <div class="media-stack">
       <div class="raw-wrap">
         <div class="raw-frame">
+          <span class="tag">Raw Image</span>
           <img src="${p.raw}" alt="Raw image ${p.id}">
         </div>
-        <img class="flow-arrow"
-             src="arrow.png"
-             alt="Arrow"
-             style="--arrow-w:${arrowW}px;">
       </div>
       <div class="thumb-frame" data-thumb>
         <img src="${p.thumb}" alt="Thumbnail ${p.id}">
@@ -572,7 +562,7 @@ projects.forEach((p, index) => {
 });
 
 /* ============================================================
-   4. SCROLL REVEAL
+   3. SCROLL REVEAL
    ============================================================ */
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -583,7 +573,7 @@ const revealObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 /* ============================================================
-   5. THUMBNAIL REVEAL ANIMATION
+   4. THUMBNAIL REVEAL ANIMATION
    ============================================================ */
 const thumbObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -594,7 +584,7 @@ const thumbObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('[data-thumb]').forEach(el => thumbObserver.observe(el));
 
 /* ============================================================
-   6. MOUSE GLOW
+   5. MOUSE GLOW
    ============================================================ */
 const mouseGlow = document.getElementById('mouseGlow');
 let glowVisible = false;
